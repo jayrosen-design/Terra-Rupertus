@@ -6,10 +6,7 @@ import 'cesium/Build/Cesium/Widgets/widgets.css';
 import LayersSidebar from './LayersSidebar';
 import CustomTimeline from './CustomTimeline';
 
-// Configure Cesium base URL for static assets
-if (typeof window !== 'undefined') {
-  (window as any).CESIUM_BASE_URL = '/cesium';
-}
+// Cesium will use its default CDN for static assets
 
 // NASA GIBS Geographic Tiling Scheme (from official examples)
 const createGeographicTilingScheme = (options?: any) => {
