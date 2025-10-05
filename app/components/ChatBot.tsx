@@ -6,6 +6,7 @@ import Image from 'next/image';
 interface ChatBotProps {
   activeLayers: Set<string>;
   currentDate: Date;
+  activeSetName?: string;
 }
 
 interface Message {
@@ -13,7 +14,7 @@ interface Message {
   content: string;
 }
 
-export default function ChatBot({ activeLayers, currentDate }: ChatBotProps) {
+export default function ChatBot({ activeLayers, currentDate, activeSetName }: ChatBotProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -23,6 +24,7 @@ export default function ChatBot({ activeLayers, currentDate }: ChatBotProps) {
   ]);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [useGemini, setUseGemini] = useState(true);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -32,6 +34,15 @@ export default function ChatBot({ activeLayers, currentDate }: ChatBotProps) {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  const renderBoldHTML = (text: string) => {
+    const escaped = text
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+    const withBold = escaped.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+    return { __html: withBold } as const;
+  };
 
   const getContextAwareResponse = (userMessage: string): string => {
     const lowerMessage = userMessage.toLowerCase();
@@ -94,6 +105,70 @@ export default function ChatBot({ activeLayers, currentDate }: ChatBotProps) {
     return `I'm here to help you understand the environmental changes shown in NASA's Terra satellite data! You can ask me about:\n\n🔍 What you're currently seeing on the globe\n🌍 How to interpret different data layers\n📊 Environmental trends over the 25 years\n💡 What can be done to address these issues\n🦔 My story and journey\n\nTry asking: "What am I seeing?" or "How can we fix these problems?" or explore the timeline to see changes over time!`;
   };
 
+  const captureCesiumScreenshot = (): string | null => {
+    try {
+      const container = document.getElementById('cesiumContainer');
+      if (!container) return null;
+      const canvas = container.querySelector('canvas') as HTMLCanvasElement | null;
+      if (!canvas) return null;
+      return canvas.toDataURL('image/png');
+    } catch {
+      return null;
+    }
+  };
+
+  const callGemini = async (userPrompt: string): Promise<string | null> => {
+    const apiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
+    if (!apiKey) return null;
+
+    const dataUrl = captureCesiumScreenshot();
+    const base64Image = dataUrl ? dataUrl.split(',')[1] : undefined;
+
+    const contextText = `You are Rupert, an assistant describing a 3D Cesium globe with NASA GIBS layers.\n` +
+      `Current UTC date: ${currentDate.toISOString()}.\n` +
+      `Active layer IDs: ${Array.from(activeLayers).join(', ') || 'none'}.\n` +
+      `Active layer set: ${activeSetName || 'unknown'}.\n` +
+      `Explain what is visible and answer the user. Be concise and specific to the imagery.`;
+
+    const parts: any[] = [];
+    if (base64Image) {
+      parts.push({ inline_data: { mime_type: 'image/png', data: base64Image } });
+    }
+    parts.push({ text: contextText });
+    parts.push({ text: userPrompt });
+
+    const body: any = {
+      contents: [
+        {
+          role: 'user',
+          parts
+        }
+      ]
+    };
+
+    try {
+      const resp = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-goog-api-key': apiKey
+        },
+        body: JSON.stringify(body)
+      });
+      if (!resp.ok) {
+        console.error('Gemini HTTP error', resp.status, await resp.text());
+        return null;
+      }
+      const json = await resp.json();
+      const parts = json?.candidates?.[0]?.content?.parts || [];
+      const text = parts.map((p: any) => p?.text).filter(Boolean).join('\n').trim();
+      return text || null;
+    } catch (e) {
+      console.error('Gemini call failed', e);
+      return null;
+    }
+  };
+
   const handleSend = async () => {
     if (!input.trim()) return;
 
@@ -102,13 +177,20 @@ export default function ChatBot({ activeLayers, currentDate }: ChatBotProps) {
     setInput('');
     setIsTyping(true);
 
-    // Simulate AI response delay
-    setTimeout(() => {
-      const response = getContextAwareResponse(input);
-      const assistantMessage: Message = { role: 'assistant', content: response };
+    // Try Gemini first (with screenshot context), fall back to local rules
+    try {
+      let responseText: string | null = null;
+      if (useGemini) {
+        responseText = await callGemini(input);
+      }
+      if (!responseText) {
+        responseText = getContextAwareResponse(input);
+      }
+      const assistantMessage: Message = { role: 'assistant', content: responseText };
       setMessages((prev) => [...prev, assistantMessage]);
+    } finally {
       setIsTyping(false);
-    }, 800);
+    }
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -150,6 +232,12 @@ export default function ChatBot({ activeLayers, currentDate }: ChatBotProps) {
             <p>Your Earth Data Guide</p>
           </div>
         </div>
+        <div className="mr-2 text-xs text-gray-300">
+          <label style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+            <input type="checkbox" checked={useGemini} onChange={(e) => setUseGemini(e.target.checked)} />
+            Gemini
+          </label>
+        </div>
         <button 
           className="chatbot-minimize" 
           onClick={() => setIsOpen(false)}
@@ -175,9 +263,7 @@ export default function ChatBot({ activeLayers, currentDate }: ChatBotProps) {
             </div>
             <div className="message-content">
               {message.content.split('\n').map((line, i) => (
-                <p key={i} style={{ marginBottom: line ? '8px' : '0' }}>
-                  {line}
-                </p>
+                <p key={i} style={{ marginBottom: line ? '8px' : '0' }} dangerouslySetInnerHTML={renderBoldHTML(line)} />
               ))}
             </div>
           </div>

@@ -165,6 +165,11 @@ export default function NASAGibsViewer({ className = '' }: NASAGibsViewerProps) 
         wms: true,
         startDate: new Date(Date.UTC(2012, 4, 8))
       },
+      MODIS_Terra_Thermal_Anomalies_Night: {
+        id: 'MODIS_Terra_Thermal_Anomalies_Night',
+        wms: true,
+        startDate: new Date(Date.UTC(2012, 4, 8))
+      },
       OSM_Land_Water_Map: {
         id: 'OSM_Land_Water_Map',
         resolution: '250m',
@@ -185,6 +190,18 @@ export default function NASAGibsViewer({ className = '' }: NASAGibsViewerProps) 
         id: 'BlueMarble_ShadedRelief_Bathymetry',
         resolution: '500m',
         format: 'image/jpeg'
+      },
+      MISR_Aerosol_Optical_Depth_Avg_Green_Monthly: {
+        id: 'MISR_Aerosol_Optical_Depth_Avg_Green_Monthly',
+        resolution: '1km',
+        format: 'image/png',
+        startDate: new Date(Date.UTC(2000, 1, 24))
+      },
+      MOPITT_CO_Daily_Total_Column_Day: {
+        id: 'MOPITT_CO_Daily_Total_Column_Day',
+        resolution: '1km',
+        format: 'image/png',
+        startDate: new Date(Date.UTC(2000, 1, 24))
       },
       AIRS_Dust_Score_Ocean_Day: {
         id: 'AIRS_Dust_Score_Ocean_Day',
@@ -208,6 +225,18 @@ export default function NASAGibsViewer({ className = '' }: NASAGibsViewerProps) 
         id: 'MODIS_Terra_SurfaceReflectance_Bands721',
         resolution: '500m',
         format: 'image/jpeg',
+        startDate: new Date(Date.UTC(2000, 1, 24))
+      },
+      MODIS_Terra_Cloud_Fraction_Day: {
+        id: 'MODIS_Terra_Cloud_Fraction_Day',
+        resolution: '1km',
+        format: 'image/png',
+        startDate: new Date(Date.UTC(2000, 1, 24))
+      },
+      MODIS_Terra_L2_Chlorophyll_A: {
+        id: 'MODIS_Terra_L2_Chlorophyll_A',
+        resolution: '1km',
+        format: 'image/png',
         startDate: new Date(Date.UTC(2000, 1, 24))
       }
     },
@@ -270,14 +299,49 @@ export default function NASAGibsViewer({ className = '' }: NASAGibsViewerProps) 
           max: '32°C'
         }
       },
+      
       {
-        name: 'Fires',
+        name: 'Fires and Thermal Anomalies (Day)',
         layers: ['MODIS_Terra_CorrectedReflectance_TrueColor', 'MODIS_Terra_Thermal_Anomalies_Day'],
         icon: '🔥',
         legend: {
           type: 'single' as const,
-          title: 'Fires',
-          color: '#f00'
+          title: 'Thermal Anomalies (Day)',
+          color: '#ff3333'
+        }
+      },
+      {
+        name: 'Fires and Thermal Anomalies (Night)',
+        layers: ['OSM_Land_Water_Map', 'MODIS_Terra_Thermal_Anomalies_Night'],
+        icon: '🌋',
+        legend: {
+          type: 'single' as const,
+          title: 'Thermal Anomalies (Night)',
+          color: '#ff8800'
+        }
+      },
+      {
+        name: 'Aerosol Optical Depth Average (Green, Monthly)',
+        layers: ['MODIS_Terra_CorrectedReflectance_TrueColor', 'MISR_Aerosol_Optical_Depth_Avg_Green_Monthly'],
+        icon: '🟩',
+        legend: {
+          type: 'scale' as const,
+          title: 'AOD (Green, Monthly Avg)',
+          colorbar: 'https://gibs.earthdata.nasa.gov/colormaps/aerosol_optical_depth.png',
+          min: 'Low',
+          max: 'High'
+        }
+      },
+      {
+        name: 'Carbon Monoxide (L3, Daily, Day, Total Column)',
+        layers: ['MODIS_Terra_CorrectedReflectance_TrueColor', 'MOPITT_CO_Daily_Total_Column_Day'],
+        icon: '☀️',
+        legend: {
+          type: 'scale' as const,
+          title: 'CO Total Column (Day)',
+          colorbar: 'https://gibs.earthdata.nasa.gov/colormaps/carbon_monoxide.png',
+          min: 'Low',
+          max: 'High'
         }
       },
       {
@@ -323,6 +387,35 @@ export default function NASAGibsViewer({ className = '' }: NASAGibsViewerProps) 
         name: 'Blue Marble Next Generation',
         layers: ['BlueMarble_ShadedRelief_Bathymetry'],
         icon: '🌍'
+      },
+      {
+        name: 'Cloud Fraction (Day)',
+        layers: ['MODIS_Terra_CorrectedReflectance_TrueColor', 'MODIS_Terra_Cloud_Fraction_Day'],
+        icon: '⛅',
+        legend: {
+          type: 'scale' as const,
+          title: 'Cloud Fraction (Day)',
+          colorbar: 'https://gibs.earthdata.nasa.gov/colormaps/cloud_fraction.png',
+          min: '0%',
+          max: '100%'
+        }
+      },
+      {
+        name: 'Chlorophyll a (L2)',
+        layers: ['OSM_Land_Water_Map', 'MODIS_Terra_L2_Chlorophyll_A'],
+        icon: '🦠',
+        legend: {
+          type: 'scale' as const,
+          title: 'Chlorophyll-a (L2)',
+          colorbar: 'https://gibs.earthdata.nasa.gov/colormaps/chlorophyll_a.png',
+          min: 'Low',
+          max: 'High'
+        }
+      },
+      {
+        name: 'VIIRS Light Pollution',
+        layers: ['VIIRS_CityLights_2012'],
+        icon: '💡'
       }
     ]
   };
@@ -361,7 +454,12 @@ export default function NASAGibsViewer({ className = '' }: NASAGibsViewerProps) 
         animation: false,
         timeline: false, // Disable default timeline - using custom timeline
         fullscreenButton: false,
-        vrButton: false
+        vrButton: false,
+        contextOptions: {
+          webgl: {
+            preserveDrawingBuffer: true
+          }
+        }
       });
 
       viewer.scene.globe.baseColor = Cesium.Color.BLACK;

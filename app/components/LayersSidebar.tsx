@@ -61,18 +61,24 @@ export default function LayersSidebar({ config, selectedLayerSet, onLayerSetChan
         </div>
 
         <div className="layers-list">
-          {config.sets.map((set) => (
-            <button
-              key={set.name}
-              className={`layer-button ${selectedLayerSet === set.name ? 'active' : ''}`}
-              onClick={() => {
-                onLayerSetChange(set.name);
-                // Don't close sidebar when selecting a layer
-              }}
-            >
-              <span className="layer-icon">{set.icon}</span>
-              <span>{set.name}</span>
-            </button>
+          {Object.entries(groupSetsByInstrument(config.sets)).map(([group, sets]) => (
+            <div key={group} className="mb-4 rounded-md border border-gray-600 bg-black bg-opacity-40">
+              <div className="px-3 py-2 text-xs font-semibold uppercase tracking-wide text-blue-300 border-b border-gray-600">{group}</div>
+              <div className="p-2">
+                {sets.map((set) => (
+                  <button
+                    key={set.name}
+                    className={`layer-button ${selectedLayerSet === set.name ? 'active' : ''}`}
+                    onClick={() => {
+                      onLayerSetChange(set.name);
+                    }}
+                  >
+                    <span className="layer-icon">{set.icon}</span>
+                    <span>{set.name}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
           ))}
         </div>
 
@@ -90,4 +96,37 @@ export default function LayersSidebar({ config, selectedLayerSet, onLayerSetChan
       </div>
     </>
   );
+}
+
+// Helper: group layer sets by inferred satellite/instrument from layer IDs
+function groupSetsByInstrument(sets: LayerSet[]): Record<string, LayerSet[]> {
+  const groups: Record<string, LayerSet[]> = {};
+  for (const s of sets) {
+    const group = inferGroupName(s.layers);
+    if (!groups[group]) groups[group] = [];
+    groups[group].push(s);
+  }
+  return groups;
+}
+
+function inferGroupName(layerIds: string[]): string {
+  // Prefer first scientific layer over base like OSM/BlueMarble
+  const preferred = layerIds.find((id) => !/^OSM_|^BlueMarble_/i.test(id)) || layerIds[0] || 'Other';
+  const parts = preferred.split('_');
+  // Known instruments/satellites
+  const first = parts[0];
+  const second = parts[1] || '';
+  if (/^MODIS$/i.test(first)) {
+    if (/^Terra$/i.test(second)) return 'MODIS Terra';
+    if (/^Aqua$/i.test(second)) return 'MODIS Aqua';
+    return 'MODIS';
+  }
+  if (/^VIIRS$/i.test(first)) return 'VIIRS';
+  if (/^MISR$/i.test(first)) return 'MISR - Terra';
+  if (/^MOPITT$/i.test(first)) return 'MOPITT - Terra';
+  if (/^AIRS$/i.test(first)) return 'AIRS';
+  if (/^GHRSST$/i.test(first)) return 'GHRSST';
+  if (/^BlueMarble$/i.test(first)) return 'Blue Marble';
+  if (/^OSM$/i.test(first)) return 'OpenStreetMap';
+  return first || 'Other';
 }

@@ -58,6 +58,15 @@ export default function TerraSatellitePage() {
             </p>
           </div>
 
+          {/* MODIS Illustration */}
+          <div className="terra-info-card" style={{ textAlign: 'center' }}>
+            <img
+              src="/modis.jpg"
+              alt="MODIS Overview"
+              style={{ maxWidth: '100%', height: 'auto', borderRadius: 12 }}
+            />
+          </div>
+
           {/* Five Instruments */}
           <div className="terra-info-card">
             <h2 className="terra-section-title">Five Onboard Sensors</h2>
@@ -107,6 +116,16 @@ export default function TerraSatellitePage() {
               Because all five instruments are on the same satellite making simultaneous observations, 
               scientists are able to compare different aspects of Earth's characteristics over time.
             </p>
+          </div>
+
+          {/* Terra Painting Animation */}
+          <div className="terra-info-card" style={{ textAlign: 'center' }}>
+            <video
+              src="/Terra_Satellite_Painting_Animation.mp4"
+              controls
+              preload="metadata"
+              style={{ width: '100%', borderRadius: 12 }}
+            />
           </div>
         </div>
       </div>

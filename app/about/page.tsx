@@ -32,6 +32,16 @@ export default function AboutPage() {
                 🌐 Visit Our NASA Space Apps Team Page
               </a>
             </div>
+            <div className="about-link-section" style={{ marginTop: 12 }}>
+              <a
+                href="https://www.canva.com/design/DAG02k733X4/9QJlne6EbohXi7wCiTYPRw/view?utm_content=DAG02k733X4&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=hd452a88757"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="nasa-team-link"
+              >
+                🎥 View Our Presentation
+              </a>
+            </div>
           </div>
 
           {/* Team Information */}
@@ -71,35 +81,62 @@ export default function AboutPage() {
           {/* Team Members */}
           <div className="about-info-card">
             <h2 className="about-section-title">👨‍💻 Team Members</h2>
+            <div style={{ textAlign: 'center', marginBottom: 16 }}>
+              <img
+                src="/team.webp"
+                alt="Team Terra Rupertus"
+                style={{ maxWidth: '100%', height: 'auto', borderRadius: 12 }}
+              />
+            </div>
             <div className="team-members-grid">
               <div className="team-member-card">
                 <div className="member-avatar">👨‍💻</div>
                 <h3 className="member-name">Jay Rosen</h3>
                 <p className="member-role">Developer</p>
+                <a href="https://www.linkedin.com/in/jayrosenartist/" target="_blank" rel="noopener noreferrer" aria-label="Jay Rosen LinkedIn" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, color: '#fff' }}>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5C4.98 4.88 3.86 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8h4V24h-4V8zm7.5 0h3.8v2.2h.1c.5-1 1.8-2.2 3.8-2.2 4 0 4.7 2.6 4.7 6V24h-4v-7c0-1.7 0-3.8-2.3-3.8-2.3 0-2.6 1.8-2.6 3.7V24h-4V8z"/></svg>
+                  LinkedIn
+                </a>
               </div>
 
               <div className="team-member-card">
                 <div className="member-avatar">🎨</div>
                 <h3 className="member-name">Jessica Rosen</h3>
                 <p className="member-role">Artist</p>
+                <a href="https://www.linkedin.com/in/jessica-rosen-8b9500246/" target="_blank" rel="noopener noreferrer" aria-label="Jessica Rosen LinkedIn" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, color: '#fff' }}>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5C4.98 4.88 3.86 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8h4V24h-4V8zm7.5 0h3.8v2.2h.1c.5-1 1.8-2.2 3.8-2.2 4 0 4.7 2.6 4.7 6V24h-4v-7c0-1.7 0-3.8-2.3-3.8-2.3 0-2.6 1.8-2.6 3.7V24h-4V8z"/></svg>
+                  LinkedIn
+                </a>
               </div>
 
               <div className="team-member-card">
                 <div className="member-avatar">✍️</div>
                 <h3 className="member-name">Julieth Lorne</h3>
                 <p className="member-role">Storytelling</p>
+                <a href="https://www.linkedin.com/in/julieth-lorne/" target="_blank" rel="noopener noreferrer" aria-label="Julieth Lorne LinkedIn" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, color: '#fff' }}>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5C4.98 4.88 3.86 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8h4V24h-4V8zm7.5 0h3.8v2.2h.1c.5-1 1.8-2.2 3.8-2.2 4 0 4.7 2.6 4.7 6V24h-4v-7c0-1.7 0-3.8-2.3-3.8-2.3 0-2.6 1.8-2.6 3.7V24h-4V8z"/></svg>
+                  LinkedIn
+                </a>
               </div>
 
               <div className="team-member-card">
                 <div className="member-avatar">👩‍💻</div>
                 <h3 className="member-name">Laura Chavez</h3>
                 <p className="member-role">Animation</p>
+                <a href="https://www.linkedin.com/in/laurachavezruiz/" target="_blank" rel="noopener noreferrer" aria-label="Laura Chavez LinkedIn" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, color: '#fff' }}>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5C4.98 4.88 3.86 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8h4V24h-4V8zm7.5 0h3.8v2.2h.1c.5-1 1.8-2.2 3.8-2.2 4 0 4.7 2.6 4.7 6V24h-4v-7c0-1.7 0-3.8-2.3-3.8-2.3 0-2.6 1.8-2.6 3.7V24h-4V8z"/></svg>
+                  LinkedIn
+                </a>
               </div>
 
               <div className="team-member-card">
                 <div className="member-avatar">👨‍🚀</div>
                 <h3 className="member-name">Paul Muszynski</h3>
                 <p className="member-role">Space Science</p>
+                <a href="https://www.linkedin.com/in/paul-muszynski-a4623b129/" target="_blank" rel="noopener noreferrer" aria-label="Paul Muszynski LinkedIn" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, color: '#fff' }}>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M4.98 3.5C4.98 4.88 3.86 6 2.5 6S0 4.88 0 3.5 1.12 1 2.5 1s2.48 1.12 2.48 2.5zM.5 8h4V24h-4V8zm7.5 0h3.8v2.2h.1c.5-1 1.8-2.2 3.8-2.2 4 0 4.7 2.6 4.7 6V24h-4v-7c0-1.7 0-3.8-2.3-3.8-2.3 0-2.6 1.8-2.6 3.7V24h-4V8z"/></svg>
+                  LinkedIn
+                </a>
               </div>
             </div>
           </div>

@@ -47,6 +47,14 @@ export default function RupertPage() {
             <p className="rupert-text">
               What would the night sky look like if you were standing on one of the many exoplanets discovered by astronomers and space missions? The list of 5500+ exoplanets at the NASA Exoplanet Archive can be combined with the latest star catalogs to translate the location and brightness of millions or even billions of stars to another perspective. From that perspective, anyone could use their imagination to draw constellations, much like our ancestors did on Earth thousands of years ago. Your challenge is to develop an app or interface for students that allows them to choose an exoplanet and then either display an interactive star chart or export a high-quality image for printing or viewing on a computer or virtual reality display, where they can draw and name constellations.
             </p>
+            <div className="mt-4" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 16 }}>
+              <div style={{ textAlign: 'center' }}>
+                <Image src="/astreaus-rupertus.jpeg" alt="Astraeus Rupertus" width={600} height={400} style={{ width: '100%', height: 'auto', borderRadius: 12 }} />
+              </div>
+              <div style={{ textAlign: 'center' }}>
+                <Image src="/astreaus-app.webp" alt="Astraeus App" width={600} height={400} style={{ width: '100%', height: 'auto', borderRadius: 12 }} />
+              </div>
+            </div>
           </div>
 
           {/* Terra Rupertus 2025 */}
@@ -64,6 +72,14 @@ export default function RupertPage() {
             <p className="rupert-text">
               To guide the experience, a Rupert AI chatbot appears in the corner of the screen, helping users interpret what they see and learn what actions can help heal the planet. By blending storytelling, science, and interactivity, Rupert 2.0: Rendezvous with Terra turns 25 years of satellite data into a living narrative — a story of curiosity, loss, and hope for Earth's future.
             </p>
+            <div className="mt-4" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 16 }}>
+              <div style={{ textAlign: 'center' }}>
+                <Image src="/rupert-watercolor.jpg" alt="Rupert Watercolor" width={600} height={800} style={{ width: '100%', height: 'auto', borderRadius: 12 }} />
+              </div>
+              <div style={{ textAlign: 'center' }}>
+                <Image src="/rupertspace.webp" alt="Rupert in Space" width={600} height={400} style={{ width: '100%', height: 'auto', borderRadius: 12 }} />
+              </div>
+            </div>
           </div>
 
           {/* Rupert in the News */}
