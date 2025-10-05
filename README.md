@@ -173,9 +173,17 @@ terra-rupertus/
 ├── gibs-web-examples/           # NASA GIBS examples
 ├── package.json                 # Dependencies
 ├── tsconfig.json               # TypeScript config
-├── next.config.js              # Next.js config
+├── next.config.js              # Next.js config with static export
 ├── .gitignore                  # Git ignore rules
-└── git-setup.md                # Git setup instructions
+├── git-setup.md                # Git setup instructions
+└── out/                        # Static export directory (generated)
+    ├── index.html              # Earth page
+    ├── about/index.html        # About page
+    ├── astreaus/index.html     # Astreaus page
+    ├── rupert/index.html       # Rupert page
+    ├── terra-satellite/index.html # Terra page
+    ├── _next/                  # Static assets
+    └── [public assets]         # Images, videos, etc.
 ```
 
 ### Build for Production
@@ -185,21 +193,44 @@ npm run build
 npm start
 ```
 
+### Static Export (Recommended for Static Hosting)
+
+```bash
+npm run export
+```
+
+This generates a static export in the `out/` directory that can be deployed to any static hosting platform.
+
 ### Deployment
 
-The application is designed for static hosting:
+The application supports both server-side and static hosting:
 
+#### **Static Hosting (Recommended)**
+1. **Generate static export**:
+```bash
+npm run export
+```
+
+2. **Deploy the `out/` directory to**:
+   - **GitHub Pages**: Upload `out/` contents to gh-pages branch
+   - **Netlify**: Drag and drop `out/` folder or connect GitHub repo
+   - **Vercel**: Connect GitHub repo (auto-detects Next.js)
+   - **AWS S3 + CloudFront**: Upload `out/` contents to S3 bucket
+   - **Any static hosting**: Upload `out/` directory contents
+
+#### **Server-Side Hosting**
 1. **Build the application**:
 ```bash
 npm run build
-npm run export  # If using static export
+npm start
 ```
 
-2. **Deploy to your preferred platform**:
-   - AWS S3 + CloudFront
+2. **Deploy to platforms that support Node.js**:
    - Vercel (recommended)
-   - Netlify
-   - GitHub Pages
+   - Netlify Functions
+   - AWS Lambda
+   - Railway
+   - Heroku
 
 ## 🌐 Cesium Ion Token
 
