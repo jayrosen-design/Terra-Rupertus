@@ -1,0 +1,78 @@
+Technical Requirement Document: Astraeus Rupertus 2.0 Web App
+I. Strategic Context and Architecture
+1.1 Project Overview
+The Astraeus Rupertus 2.0 application aims to leverage 25 years of NASA Terra satellite data to visualize global environmental stressors (light pollution, fires, carbon emissions) through the narrative of Rupert, an animated armadillo seeking a new home. The core application is a web-based, interactive 3D globe featuring a historical timeline to showcase gradual environmental change over time.
+1.2 Technology Stack
+Component
+Technology
+Rationale (Source Support)
+Frontend Framework
+React or Next.js
+Requested technology [User Query]. React is widely used for rapid, component-based UI development.
+3D Visualization Library
+CesiumJS
+Requested technology [User Query]. CesiumJS is the premier open-source library, engineered for high-precision WGS84 3D globes, essential for scientific accuracy and handling massive geospatial datasets.
+Geodetic Model
+High-precision WGS84 Ellipsoid
+CesiumJS’s core architecture provides a true 3D, geodetically accurate representation of Earth, suitable for geospatial analysis and simulation.
+Backend/Data Pipeline
+Serverless Architecture (NASA APIs)
+To maximize hackathon efficiency, the architecture avoids raw data processing by leveraging NASA's infrastructure.
+Primary Data Source
+NASA Global Imagery Browse Services (GIBS)
+GIBS provides pre-rendered, visualization-ready tiled imagery (WMTS/WMS) from Terra instruments, offloading complex scientific data processing.
+Deployment
+Static Hosting (e.g., AWS S3 + CloudFront)
+Recommended industry standard for scalable and performant delivery of static web assets globally.
+
+II. Functional Requirements (Visualization and Data)
+R.2.1 3D Globe Implementation
+The application MUST display a fully interactive 3D globe based on the high-precision WGS84 ellipsoid model provided by CesiumJS. The globe should allow the user to pan, zoom, and rotate the camera freely in three dimensions.
+R.2.2 Terra Data Integration and Data Layers
+The application MUST integrate data layers (filters/lenses) available from the NASA Earth Data / Terra satellite mission archive. The primary integration method MUST use the CesiumJS WebMapTileServiceImageryProvider to stream imagery from GIBS.
+The following sensory data required by the Astraeus Rupertus 2.0 concept MUST be implemented using corresponding Terra-related data products:
+Sensory Data Layer (Requirement)
+Corresponding NASA Data Product/Instrument
+Visualization Type/Details
+Fires
+MODIS Thermal Anomalies/Fire (MOD14)
+Active fire detections visualized as points or a thermal heatmap layer draped over the globe.
+Carbon Dioxide (CO2)
+MOPITT Carbon Monoxide (CO) Products
+MOPITT measures Carbon Monoxide (CO), an excellent tracer for pollution. Must be visualized as gridded color maps (heatmaps) that show concentration levels and plume transport.
+Light Pollution
+VIIRS Nighttime Lights (NTL)
+NTL data (often VIIRS DNB) is used to map artificial light intensity, serving as a proxy for light pollution. This layer should be streamable onto the globe.
+Methane
+TBD/Proxy
+The source material requires a methane layer, but an easily accessible, visualization-ready methane product from the Terra suite is not explicitly documented; a proxy (e.g., related MISR or MODIS aerosol/pollution data) may be necessary.
+
+R.2.3 Data Query and Acquisition
+The backend logic SHOULD utilize programmatic access to NASA's data ecosystem:
+• The Common Metadata Repository (CMR) API SHOULD be used for programmatic discovery of required datasets (collections and granules).
+• The earthaccess Python library MAY be used in the data processing scripts (if any are required) as a user-friendly wrapper for CMR API access.
+III. Time-Dynamic Features (Timeline)
+The application MUST include a timeline feature to see specific points in time and view the gradual change of Earth over time.
+R.3.1 Temporal Coverage and Snapshots
+The visualization MUST span the 25-year dataset period of the Terra mission. The user interface SHOULD highlight or allow quick selection of 25 specific points in time to showcase the gradual historical changes.
+R.3.2 Timeline Control Mechanism
+The CesiumJS Viewer MUST be configured with the internal viewer.clock object, setting the startTime and stopTime to match the Terra data's operational period.
+• The CesiumJS Timeline Widget SHOULD be implemented or a custom UI built to allow the user to scrub or animate through this time range.
+• The animation speed (viewer.clock.multiplier) SHOULD be configurable for smooth playback (e.g., animating one day per second is a typical setting).
+R.3.3 Data-Time Synchronization
+The imagery layers MUST dynamically update based on the current time selected by the user on the timeline.
+• This synchronization MUST be achieved by configuring the WebMapTileServiceImageryProvider for each layer to use the viewer.clock instance.
+• The provider MUST use the WMTS time dimension extension, dynamically constructing the tile URL with the {Time} placeholder (e.g., {YYYY}-{MM}-{DD}) based on the currentTime of the clock.
+IV. User Interface and Interactivity
+R.4.1 Layer Controls and Customization
+The interface MUST include controls to display the different sensory data.
+• A UI panel MUST list all available data layers.
+• Users MUST be able to toggle the visibility of each layer (using imageryLayers.add() and imageryLayers.remove() or similar methods).
+• Users SHOULD be able to adjust the transparency/opacity of active layers (using the ImageryLayer.alpha property).
+R.4.2 Rupert Storytelling and Chatbot
+The application MUST include features to share Rupert's story and provide interactive context.
+• Chatbot Placement: An AI chatbot component, "Rupert AI chatbot," MUST appear in the bottom right of the screen when viewing the Earth.
+• Chatbot Functionality: The user MUST be able to query the Rupert chatbot. The chatbot MUST provide information on:
+    ◦ What is happening on screen (related to the visible data layers).
+    ◦ What can be done to try and fix these problems.
+• Narrative Flow: The application SHOULD use narrative elements such as annotations, guided tours, or pop-up information boxes to frame the data visualization around Rupert's journey and the environmental story.

@@ -1,0 +1,340 @@
+﻿The Terra Satellite Developer's Guide: Building a 3D Historical Data Visualization for the NASA Space Apps Challenge
+Strategic Overview: The Terra Mission and Your Hackathon Project
+This section establishes the strategic framework for the hackathon project, providing the essential context of the Terra satellite's mission, deconstructing the specific requirements of the "Animation Celebration of Terra Data!" challenge, and presenting a recommended technical architecture designed for rapid development and success within a 48-hour timeframe.
+The Legacy of Terra: 25 Years of Earth Observation
+Launched on December 18, 1999, the Terra satellite, originally designated EOS/AM-1, serves as the flagship of NASA's Earth Observing System (EOS). As a joint mission between the United States, Japan, and Canada, Terra represents a landmark initiative to observe our planet from the unique vantage point of space, studying the complex interactions between Earth's lands, oceans, atmosphere, ice, and life as a single, integrated system. Surpassing its original six-year design life, Terra has now compiled over 25 years of continuous, calibrated scientific data, creating one of the longest and most valuable single-platform satellite records ever acquired for examining long-term environmental patterns and the impacts of climate change.
+The satellite operates in a sun-synchronous orbit at an altitude of 705 km, timed to cross the equator at approximately 10:30 a.m. local solar time on its descending node. This orbital characteristic is critical, as it ensures consistent morning illumination conditions for its instruments, which minimizes shadows and allows for more comparable observations day after day and year after year.
+At the heart of the Terra mission is its suite of five state-of-the-art instruments, each designed to observe different aspects of the Earth system: ASTER, CERES, MISR, MODIS, and MOPITT. These instruments do not operate in isolation; they are designed for synergistic observation, making simultaneous measurements of the same location on Earth. This allows scientists to build a more complete, multi-faceted understanding of environmental processes, such as the relationship between surface temperature, cloud properties, and the planet's energy balance. The data from this comprehensive suite provides the raw material for the hackathon challenge.
+Deconstructing the Challenge: "Animation Celebration of Terra Data!"
+The 2025 NASA Space Apps Challenge, "Animation Celebration of Terra Data!", calls for participants to leverage the vast data archive from Terra's 25-year mission. The core requirement is to use data from any or all of the five onboard instruments to create an animated product. This product must not only be technically sound but also narratively compelling, showcasing an Earth science story that emphasizes the impacts on the participant, their community, or the broader environment.
+The project concept—a 3D interactive globe with a historical timeline—is exceptionally well-suited to meet these requirements. The "animation" component is directly addressed by the timeline feature, which allows users to scrub through time and watch the Earth change. The "storytelling" aspect is fulfilled by curating specific datasets and time periods to highlight significant environmental events or long-term trends, such as deforestation, urban sprawl, or the retreat of glaciers.
+To frame the project within the hackathon's operational context, teams must familiarize themselves with the general resources provided by the NASA Space Apps Challenge. These include the Participant FAQ, video tutorials from the Virtual Bootcamp, and detailed guides on team formation, project submission, and the judging process. Adhering to the project submission guidelines is critical; these specify the required format for the project demo (e.g., a 7-slide presentation or a 30-second video), the need for a detailed project description, and the explicit requirement to list all NASA and space agency partner data used. A successful project will not only be a technical achievement but also a well-documented and clearly presented solution that meets all official criteria.
+The Recommended Architecture: A Roadmap for Success
+For a time-constrained 48-hour hackathon, a robust and efficient technical architecture is paramount. The proposed architecture is designed to maximize development velocity by leveraging existing NASA infrastructure, thereby minimizing the need for complex backend development and raw data processing.
+The architecture consists of two primary layers:
+1. Backend/Data Layer: This layer is not a custom server that the team needs to build. Instead, it relies entirely on NASA's publicly accessible Application Programming Interfaces (APIs). The primary data sources will be NASA's Global Imagery Browse Services (GIBS) for pre-rendered visual data and the Common Metadata Repository (CMR) for data discovery. This approach offloads the immense computational burden of processing petabytes of scientific data to NASA's established systems.
+2. Frontend/Client Layer: This is where the team's development effort will be focused. The client will be a browser-based single-page application built using a specialized geospatial JavaScript library. The recommended library is CesiumJS, which is purpose-built for rendering high-precision 3D globes and is equipped to handle the specific data formats and protocols used by NASA's services.
+The most critical strategic decision informing this architecture is the deliberate choice to avoid raw data processing. The native format for much of Terra's data is Hierarchical Data Format (HDF), a complex scientific format that requires specialized libraries and significant domain expertise to parse and visualize. The ACCESS to Terra Data Fusion Products project, a multi-year, professionally staffed research initiative, was created specifically to solve the challenges of combining these disparate and large-volume datasets. Attempting to replicate any portion of this work during a 48-hour hackathon is not feasible.
+Instead, this architecture follows a "visualization-ready" data pipeline. NASA's GIBS acts as the intermediary, having already processed the raw scientific data from instruments like MODIS and ASTER into standard, web-friendly tiled imagery formats (e.g., WMTS, WMS). By treating GIBS as the primary data backend, the project's focus shifts from complex data science and backend engineering to the core goals of the challenge: front-end development, user experience design, and compelling data storytelling. This strategic offloading is the key to delivering a sophisticated and functional application within the hackathon's demanding timeframe.
+The Terra Instrument Suite: A Catalogue of Visualizable Data
+The power of the Terra satellite lies in the complementary capabilities of its five instruments. Each instrument provides a unique perspective on the Earth system, and understanding their individual strengths is key to selecting the right data to tell a compelling story. This section provides a detailed catalogue of the data products available from each instrument, with a focus on those that are visually impactful and accessible for a web-based visualization project.
+To facilitate rapid decision-making, the following table provides an at-a-glance comparison of the five instruments, highlighting their primary function, resolution, and ideal use cases for the hackathon.
+Table 1: Terra Instrument Data Quick-Reference Guide
+Instrument Name (Acronym)
+	Primary Measurement
+	Spatial Resolution
+	Temporal Coverage (Revisit)
+	Key Visualizable Products
+	Common Use Case
+	ASTER (Advanced Spaceborne Thermal Emission and Reflection Radiometer)
+	High-resolution land surface imagery, temperature, and elevation
+	15m - 90m
+	16 days (by pointing)
+	True-color imagery, Digital Elevation Models (DEMs), Surface Temperature
+	The "zoom lens" for detailed, location-specific change detection (e.g., urban growth, glacier melt).
+	MODIS (Moderate-Resolution Imaging Spectroradiometer)
+	Global daily observations of land, ocean, and atmosphere
+	250m - 1km
+	1-2 days
+	Surface Reflectance (true color), Vegetation Indices (NDVI), Fire/Thermal Anomalies, Snow Cover, Sea Surface Temperature
+	The "wide-angle daily camera" for monitoring large-scale global and regional trends over time.
+	MISR (Multi-angle Imaging SpectroRadiometer)
+	Multi-angle imagery of clouds, aerosols, and land surfaces
+	275m - 1.1km
+	2-9 days (latitude dependent)
+	Aerosol Optical Depth, Cloud Top Height, Vegetation Structure
+	The "3D atmospheric camera" for studying air quality, pollution plumes, and cloud structure.
+	CERES (Clouds and the Earth's Radiant Energy System)
+	Earth's radiation budget (incoming/outgoing energy)
+	~20km (gridded to 1°)
+	Daily/Monthly
+	Top-of-Atmosphere (TOA) Radiation Flux, Cloud Radiative Effect
+	The "climate accountant" for visualizing the invisible flow of energy that drives Earth's climate system.
+	MOPITT (Measurements of Pollution in the Troposphere)
+	Global carbon monoxide (CO) concentrations
+	22km
+	~3 days
+	Gridded Carbon Monoxide Maps (daily/monthly)
+	The "pollution tracker" for mapping the transport of air pollution from sources like wildfires and industry.
+	ASTER: The High-Resolution "Zoom Lens"
+The Advanced Spaceborne Thermal Emission and Reflection Radiometer (ASTER) is Terra's high-resolution imager, often referred to as the satellite's "zoom lens". Developed in Japan, it is a multispectral instrument that captures detailed images of Earth's surface across 14 bands, from visible to thermal infrared light. It consists of three separate sensor subsystems, each with a different spatial resolution: the Visible and Near-Infrared (VNIR) at 15 meters, the Shortwave Infrared (SWIR) at 30 meters, and the Thermal Infrared (TIR) at 90 meters. Each ASTER scene covers a 60 x 60 km area, allowing for targeted observations rather than continuous global coverage. It is important to note that the SWIR detectors began to malfunction in April 2008 and were declared non-operational in January 2009, meaning SWIR data collected after this date is considered unusable.
+Key Data Products for Visualization:
+* ASTER L1T - Registered Radiance at the Sensor: This is the foundational product for creating detailed, visually stunning images. The different spectral bands can be combined to create true-color images that resemble what the human eye would see, or false-color composites that highlight specific features like vegetation health or mineral composition. These high-resolution images are ideal for creating compelling "before and after" narratives focused on a specific location, such as tracking the retreat of a glacier, the expansion of a city, the impact of a volcanic eruption, or the recovery of a landscape after a fire.
+* ASTER Global Digital Elevation Model (GDEM): Generated from stereo-pair images captured by ASTER's nadir and backward-looking near-infrared bands, the GDEM is a global map of Earth's land surface topography with a spatial resolution of approximately 30 meters. While this is not an imagery layer to be draped over the globe, it can serve as the globe's underlying terrain model. Using the GDEM as the base terrain in a CesiumJS application would provide a highly realistic and detailed 3D landscape, adding significant visual impact to any story, especially those focused on mountainous regions or dramatic topography. The entire ASTER data catalogue, including the GDEM, has been made publicly available at no cost.
+MODIS: The Planet's Daily Pulse
+The Moderate-Resolution Imaging Spectroradiometer (MODIS) is arguably Terra's most versatile and widely used instrument. It is the mission's workhorse, a scanning radiometer that captures data across a wide 2,330-km swath, allowing it to view the entire surface of the Earth every one to two days. MODIS acquires data in 36 discrete spectral bands, ranging from visible to thermal infrared wavelengths, enabling an exceptionally broad array of studies across land, ocean, and atmospheric disciplines. This combination of wide coverage, frequent revisit time, and spectral diversity makes MODIS the ideal instrument for monitoring global dynamics and creating time-series animations that show large-scale environmental change.
+Key Data Products for Visualization:
+A vast number of MODIS data products are pre-processed and made available as visual layers through NASA's GIBS, making them readily accessible for this project.
+* Surface Reflectance (e.g., MOD09): These products provide imagery of the land and sea surface with corrections for atmospheric effects like gases and aerosols, resulting in a clear, true-color view. This is the foundational visual layer for any global visualization, serving as the base map upon which other data can be overlaid.
+* Land Surface Temperature & Emissivity (MOD11): This product provides daily maps of temperature, visualizing the heat emitted by the Earth's surface. It is excellent for tracking large-scale heatwaves, identifying urban heat islands where cities are significantly warmer than surrounding rural areas, and monitoring the thermal output of active volcanoes.
+* Snow Cover (MOD10): MODIS generates daily, 8-day, and monthly global maps of snow and ice cover at 500-meter resolution. This dataset is perfect for creating animations that show the seasonal advance and retreat of snow across continents or for long-term studies of declining ice cover in polar regions.
+* Vegetation Indices (NDVI & EVI - MOD13): The Normalized Difference Vegetation Index (NDVI) and Enhanced Vegetation Index (EVI) are calculations based on visible and near-infrared light reflected by plants. These indices provide a measure of the density and health of green vegetation. Visualizations of this data are powerful for showing the "green wave" of spring across the Northern Hemisphere, the impact of droughts on croplands and forests, or the patterns of large-scale deforestation.
+* Thermal Anomalies / Fire (MOD14): Using its thermal bands, MODIS can detect active fires as small as 50 meters. The fire product provides the location of these thermal anomalies, often within hours of the satellite overpass. This is one of the most compelling datasets for storytelling, enabling near real-time tracking of major wildfires and the visualization of global fire patterns.
+* Aerosol Optical Depth (MOD04): This product measures the concentration of tiny solid or liquid particles (aerosols) suspended in the atmosphere. It is used to visualize and track large plumes of smoke from wildfires, dust from deserts, and industrial pollution, showing how these phenomena can travel across entire oceans and continents.
+* Ocean Color / Chlorophyll-a Concentration: By measuring the color of the ocean, MODIS can estimate the concentration of chlorophyll, which indicates the presence of phytoplankton—microscopic marine plants. Visualizations can reveal massive phytoplankton blooms, showing the base of the marine food web and tracing the patterns of ocean currents.
+MISR: A Multi-Angle View of Our Atmosphere
+The Multi-angle Imaging SpectroRadiometer (MISR) is a unique instrument that provides a new perspective on Earth. Unlike most satellite imagers that look straight down (at nadir), MISR consists of nine separate cameras that capture images of the same location from nine different angles: one at nadir, and four forward and four aftward angles up to 70.5 degrees. It takes about seven minutes for all nine cameras to view the same 360-km wide area as the satellite passes overhead. This multi-angle approach is its key strength, as the way sunlight scatters off particles and surfaces changes with the viewing angle. By analyzing these changes, MISR can deduce the properties of atmospheric aerosols, clouds, and land surfaces that are difficult or impossible to determine from a single-view instrument.
+Key Data Products for Visualization:
+* Aerosol Optical Depth (AOD) and Particle Properties: While MODIS also measures AOD, MISR's multi-angle data allows scientists to go a step further and retrieve information about the aerosol particles themselves, such as their size, shape (e.g., spherical droplets vs. non-spherical dust), and refractive index. This makes MISR data particularly valuable for distinguishing between different types of aerosols, such as industrial pollution, biomass burning smoke, and mineral dust. Visualizations of MISR AOD can provide a more nuanced look at air quality and the composition of pollution plumes.
+* Cloud Top Height and Type: By viewing clouds from multiple angles, MISR can use stereoscopic techniques to calculate the height of cloud tops with high accuracy. This data can be used to create 3D maps of cloud fields, which could be visualized as a height field on the globe, adding a true three-dimensional element to weather systems. The multi-angle data also helps in classifying different cloud types.
+* Land Surface Properties (Albedo, LAI): MISR data is used to calculate surface albedo (the fraction of sunlight reflected by the surface) and biophysical properties like Leaf Area Index (LAI). These can be visualized as global maps showing how reflective different surfaces are or the density of vegetation canopies.
+CERES: Visualizing the Invisible Energy Budget
+The Clouds and the Earth's Radiant Energy System (CERES) instrument is designed to answer one of the most fundamental questions in climate science: how much energy is entering and leaving the Earth system? There are two identical CERES instruments aboard Terra, which measure the total amount of reflected solar radiation (shortwave energy) and emitted thermal infrared radiation (longwave energy) from the top of the atmosphere to the surface. This data allows scientists to calculate Earth's radiation budget—the balance between incoming energy from the sun and outgoing energy from Earth. This balance is the primary driver of our planet's climate.
+Key Data Products for Visualization:
+While CERES data does not produce traditional "imagery," its scientific datasets can be rendered as powerful color maps (heatmaps) draped over the 3D globe.
+* Top-of-Atmosphere (TOA) Fluxes (EBAF product): The Energy Balanced and Filled (EBAF) product provides monthly mean maps of incoming and outgoing radiation fluxes at a 1-degree grid resolution. Visualizing the net flux (incoming minus outgoing) can create a compelling map showing which parts of the planet are experiencing a net energy gain (warming) and which are experiencing a net energy loss (cooling). This is a direct visualization of the engine of our climate system.
+* Cloud Radiative Effect (CRE): Clouds play a dual role in the climate system: they cool the planet by reflecting sunlight back to space (the "albedo effect") and warm the planet by trapping outgoing heat (the "greenhouse effect"). The CRE product quantifies the net effect of clouds on the energy budget. A visualization of this product can tell a powerful story about the complex and critical role clouds play in regulating global temperatures.
+MOPITT: Tracking the Global Flow of Pollution
+The Measurements of Pollution in the Troposphere (MOPITT) instrument was a pioneering sensor provided by the Canadian Space Agency, and it was the first dedicated to the long-term, global measurement of carbon monoxide (CO) concentrations in the lower atmosphere (the troposphere). Carbon monoxide is a key atmospheric pollutant, produced by the incomplete combustion of carbon-based fuels, such as in wildfires, industrial processes, and vehicle emissions. It also serves as an excellent tracer gas, allowing scientists to track the movement of pollution plumes over long distances. After 25 years of successful operation, the MOPITT instrument was decommissioned in early 2025, leaving behind a complete and invaluable data record of global air quality trends.
+Key Data Products for Visualization:
+* Level 3 Gridded Carbon Monoxide Products: MOPITT data is processed into user-friendly, global maps of CO concentrations. These products are available at daily, 8-day, and monthly temporal resolutions and are provided on a 1-degree grid. The data also includes vertical information, providing CO concentrations at different pressure levels (altitudes) in the atmosphere. These maps are perfectly suited for animation. By stepping through the daily or monthly products, a project can create a dynamic visualization showing plumes of CO billowing from major fire events, like the 2019-2020 Australian bushfires or the 2023 Canadian wildfires, and being transported across oceans and continents by global wind patterns. This provides a stark and clear illustration of how regional pollution events can have a global impact.
+The NASA Data Pipeline: A Developer's Workflow for Accessing Terra Data
+Successfully building a data-driven application during a hackathon requires a clear and efficient workflow for acquiring data. This section details the recommended pipeline for accessing Terra data, focusing on programmatic methods that are well-suited for web development. The workflow prioritizes NASA's high-level services that provide data in visualization-ready formats, minimizing the need for local data storage and processing.
+Data Discovery: Querying the Common Metadata Repository (CMR) API
+The first step in any data workflow is finding the right data. NASA's Common Metadata Repository (CMR) is the authoritative, centralized catalog for all data and service metadata from the Earth Observing System Data and Information System (EOSDIS). It is the essential starting point for programmatically discovering the exact datasets required for the project.
+The process of using CMR involves a two-step search paradigm:
+1. Search for Collections: A "collection" represents a complete dataset, such as "MODIS/Terra Snow Cover Daily L3 Global 500m Grid, Version 6." A search for collections is used to find the unique identifier (concept_id) and general characteristics of the dataset of interest.
+2. Search for Granules: A "granule" is an individual file or scene within a collection, typically corresponding to a specific time and geographic area. Once a collection is identified, a granule search is performed to find the specific files needed, filtered by parameters like a date range or a geographic bounding box.
+The CMR provides a RESTful API that allows for powerful, precise queries. A typical request to find Terra data would use parameters such as:
+* platform=Terra: To specify the satellite.
+* instrument=MODIS: To specify the instrument.
+* temporal=2023-08-01T00:00:00Z,2023-08-31T23:59:59Z: To specify a date and time range.
+* bounding_box=-120,34,-118,41: To specify a geographic area of interest (lower-left lon, lat, upper-right lon, lat).
+The JSON response from a CMR granule search is rich with metadata, but most importantly, it contains a list of URLs for each matching granule. These URLs provide direct access to the data through various services, including direct HTTPS download, OPeNDAP, and, crucially for this project, links to the corresponding visualizations in GIBS.
+For developers working in Python, the earthaccess library is a highly recommended tool. It acts as a user-friendly wrapper around the CMR API, simplifying the process of authentication with Earthdata Login and constructing complex search queries with just a few lines of code.
+The Visualization Fast-Track: Streaming Imagery with GIBS
+For this project's primary goal of visualizing data on a 3D globe, the Global Imagery Browse Services (GIBS) is the most important component of the data pipeline. GIBS is a system designed to provide pre-rendered, tiled visualizations of NASA's vast archive of Earth science data through standard web mapping protocols. It effectively solves the problem of raw data processing by delivering analysis-ready images directly to a client application.
+Key Protocols and Implementation:
+* Web Map Tile Service (WMTS): This is the most efficient and recommended protocol for this project. WMTS provides pre-rendered map tiles at fixed scales and locations, which is ideal for fast-loading, interactive clients like CesiumJS. GIBS supports a RESTful WMTS interface, which means tile URLs can be constructed directly without complex initial requests. The standard URL structure is: https://gibs.earthdata.nasa.gov/wmts/{projection}/best/{Layer}/{Style}/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.{format}.
+* Web Map Service (WMS): WMS is a more flexible protocol that allows clients to request custom map images with specific bounding boxes and sizes. While GIBS supports WMS, it is generally less performant for tiled clients because each request requires the server to generate a new image, whereas WMTS serves pre-generated tiles.
+Implementing the Historical Timeline with GIBS:
+The key to unlocking the project's historical timeline feature lies within the {Time} parameter of the GIBS WMTS URL. GIBS has extended the WMTS standard to include this parameter, which accepts a date in YYYY-MM-DD format. The client-side application will be responsible for dynamically constructing the tile URLs. As the user interacts with the timeline widget (e.g., sliding it to a new date), the application will update the {Time} portion of the URL template and request the new set of tiles corresponding to that date from the GIBS server. This mechanism is the technical foundation for the entire time-dynamic visualization.
+To find the correct identifier for the {Layer} parameter, developers must consult the official GIBS Visualization Product Catalog. This document provides a comprehensive list of all available imagery layers, their unique identifiers, supported projections, and temporal ranges. Authentication for all NASA data services, including GIBS, requires a free Earthdata Login account.
+Advanced Access: Subsetting Scientific Data with OPeNDAP
+While GIBS provides the visual representation of the data, there may be cases where the application needs access to the underlying numerical data values. For example, a feature could allow a user to click on a point on the globe and see a chart of the actual land surface temperature over the past month. Downloading entire multi-gigabyte HDF files for such a simple query is impractical. This is the problem that the Open-source Project for a Network Data Access Protocol (OPeNDAP) solves.
+OPeNDAP is a data access protocol and server software that allows a client to request a specific subset of data from a remote scientific data file. The request can specify a spatial bounding box, a time range, or even specific variables within the file. The OPeNDAP server, which has direct access to the data file, reads only the requested portion and transmits that small subset back to the client. This enables efficient access to the scientific values within large datasets without requiring massive data transfers.
+For a hackathon project, OPeNDAP can power advanced, interactive features that go beyond simple visualization. OPeNDAP service URLs for specific data granules are typically included in the metadata returned by a CMR search, allowing an application to first display a GIBS image and then offer the user an option to query the underlying numerical data for that same granule via OPeNDAP.
+A Powerful Alternative: The Terra Data Fusion Product on AWS
+A significant challenge in using data from multiple Terra instruments is that the observations, while simultaneous, are stored in different files with different formats, spatial resolutions, and map projections. Combining these datasets to perform correlational analysis (e.g., how do fire detections from MODIS relate to carbon monoxide levels from MOPITT at the same location?) is a highly complex data fusion task.
+An ACCESS 2015 project has already addressed this challenge by creating the Terra Data Fusion Product. This high-value dataset combines co-located observations from all five Terra instruments into a single, analysis-ready data structure. The project team has performed the difficult work of aligning the different instrument footprints in space and time, creating a unified dataset that is ideal for scientific analysis.
+While the full dataset is massive, a small subsample is publicly available through the Registry of Open Data on Amazon Web Services (AWS). For a hackathon team aiming for a particularly ambitious project, this fused dataset represents a strategic opportunity. While the primary global visualization can still be powered by the more accessible GIBS imagery, the analytical core of the project's "story" could be driven by this fused product. For instance, the team could analyze the fused data to find interesting correlations between different environmental variables and then use the GIBS visualization to show those events on the globe. This approach would allow the team to present a much deeper and more scientifically rigorous narrative, potentially elevating their project above others that rely solely on single-instrument visualizations. Investigating this dataset is highly recommended for teams looking to build a truly standout, award-worthy project.
+Architecting the Application: Building the 3D Globe
+The selection of the core rendering framework is a critical architectural decision that will dictate the development process, capabilities, and ultimate success of the front-end application. This section provides a justified recommendation for the visualization technology and a practical guide for its implementation.
+To provide a clear, data-driven rationale for the technology choice, the following decision matrix evaluates the leading 3D web libraries against the specific requirements of this geospatial project.
+Table 2: 3D Globe Framework Decision Matrix
+Criteria
+	CesiumJS
+	Deck.gl
+	Three.js
+	High-Precision WGS84 Globe
+	5
+	2
+	1
+	Native WMTS/WMS Support
+	5
+	3
+	1
+	Built-in Timeline/Time-Dynamic Support
+	5
+	2
+	1
+	3D Tiles & Geospatial Format Support
+	5
+	4
+	1
+	Performance with Large-Scale Geospatial Data
+	5
+	3
+	2
+	Community & Documentation for Geospatial Use
+	5
+	3
+	2
+	Overall Recommendation Score
+	30
+	17
+	8
+	Scoring: 1 (Poor/Not Supported) to 5 (Excellent/Natively Supported)
+Selecting the Right Tool: CesiumJS vs. Deck.gl vs. Three.js
+The decision matrix clearly indicates that CesiumJS is the superior choice for this project. The rationale behind this recommendation is rooted in the specific domain of the application.
+* CesiumJS: This is the highly recommended framework. CesiumJS is an open-source JavaScript library designed from the ground up specifically for creating world-class, high-performance 3D globes and maps. Its core is a high-precision WGS84 globe, which means it correctly handles the curvature of the Earth and can accurately render geospatial data at any scale. It has first-class, native support for the exact standards and features required by this project, including WMTS and WMS imagery layers, time-dynamic data visualization linked to a built-in clock and timeline widget, and support for other key geospatial formats like 3D Tiles, KML, and GeoJSON. The entire architecture of CesiumJS is optimized for streaming and rendering massive geospatial datasets, making it the perfect tool for this specific task.
+* Deck.gl: Deck.gl is a powerful and popular library for large-scale data visualization, particularly known for its layered approach and excellent performance. However, its primary focus is on 2D maps and abstract 3D visualizations overlaid on those maps. While it does offer an experimental GlobeView, this feature comes with significant limitations that make it unsuitable as the core of this project. These limitations include a lack of support for full 3D camera rotation (pitch and bearing are fixed), potential rendering inaccuracies at high zoom levels, and experimental support for tiled data layers. Using Deck.gl would mean compromising on the central requirement of a fully interactive 3D globe.
+* Three.js: Three.js is an excellent and widely used general-purpose 3D graphics library for the web. It is the foundation for countless 3D experiences, games, and product configurators. However, it is fundamentally the wrong tool for this project. Three.js has no inherent understanding of geospatial concepts like latitude, longitude, map projections, or the WGS84 ellipsoid. To visualize Terra data in Three.js, a team would first need to build a complete geospatial rendering engine from scratch—a task that involves complex mathematics for coordinate transformations, implementing a tiled data streaming and management system, and handling the precision issues of rendering a planet-sized object. This is a massive engineering undertaking, far beyond the scope of a 48-hour hackathon.
+Implementation Guide: Setting Up a High-Precision Globe with CesiumJS
+Setting up a basic CesiumJS application is a straightforward process. The following steps will create a web page with a fully interactive 3D globe, ready for data layers to be added.
+Step 1: HTML Setup Create a basic index.html file. Inside the <body>, add a <div> element that will serve as the container for the Cesium viewer. This container must be styled to have a non-zero height and width, typically to fill the entire browser window.
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <meta charset="UTF-8">
+ <title>Terra Data Viewer</title>
+ <style>
+   html, body, #cesiumContainer {
+     width: 100%;
+     height: 100%;
+     margin: 0;
+     padding: 0;
+     overflow: hidden;
+   }
+ </style>
+</head>
+<body>
+ <div id="cesiumContainer"></div>
+ <script type="module" src="main.js"></script>
+</body>
+</html>
+
+Step 2: Include CesiumJS The easiest way to get started is by installing CesiumJS as a package using NPM (Node Package Manager).
+npm install --save cesium
+
+This will add the Cesium library to the project's node_modules directory.
+Step 3: Initialization Create a main.js file. This file will import the necessary components from the Cesium library and initialize the Viewer object, attaching it to the div created in the HTML file.
+import { Viewer, Ion } from 'cesium';
+import 'cesium/Build/Cesium/Widgets/widgets.css';
+
+// Your Cesium Ion access token
+Ion.defaultAccessToken = 'YOUR_CESIUM_ION_ACCESS_TOKEN';
+
+// Initialize the Cesium Viewer in the 'cesiumContainer' div.
+const viewer = new Viewer('cesiumContainer', {
+ terrain: Cesium.Terrain.fromWorldTerrain(), // High-resolution terrain
+ // Disable widgets we don't need for this custom app
+ animation: false,
+ baseLayerPicker: false,
+ fullscreenButton: false,
+ geocoder: false,
+ homeButton: false,
+ infoBox: false,
+ sceneModePicker: false,
+ selectionIndicator: false,
+ timeline: false, // We will use the clock but control it via a custom UI
+ navigationHelpButton: false
+});
+
+Step 4: Cesium Ion Token CesiumJS uses the Cesium ion platform to stream high-quality default assets, including global terrain, satellite imagery (Bing Maps), and 3D buildings. To access these assets, a free Cesium ion account and an access token are required. After signing up, the default token can be copied from the "Access Tokens" tab on the Cesium ion dashboard and placed into the JavaScript code as shown above.
+With these steps completed, opening the index.html file in a web server environment will display a high-precision, interactive 3D globe, ready for the Terra data layers.
+Creating the User Interface: Implementing Data Layer Filters
+The user interface for controlling the data layers should be simple and intuitive. A sidebar or a floating panel containing a list of available Terra data products is a standard and effective approach. Each data product can be represented by a checkbox or a radio button.
+The underlying logic is straightforward:
+1. UI State: The application state will maintain a list of available layers and their current visibility status (e.g., checked or unchecked).
+2. Event Handling: An event listener will be attached to each checkbox. When a user checks or unchecks a box, this event will trigger a function.
+3. Layer Management: This function will be responsible for adding or removing the corresponding ImageryLayer from the Cesium globe. The viewer.imageryLayers object acts as a collection of all active imagery layers. The add() and remove() methods on this object are used to dynamically change what is displayed on the globe. Additional UI elements, like sliders for opacity or brightness, can be linked to the .alpha and .brightness properties of the corresponding ImageryLayer object.
+Bringing Data to Life: Visualizing Terra's History on the Globe
+This section provides the core implementation details for visualizing Terra's historical data. It covers the code patterns for adding imagery from GIBS, configuring the built-in time components of CesiumJS, and, most importantly, synchronizing these elements to create a seamless, interactive historical timeline.
+Adding and Managing Terra Imagery Layers from GIBS
+The primary mechanism for displaying Terra data is through the Cesium.WebMapTileServiceImageryProvider class. This class is designed to connect to any WMTS-compliant server, including GIBS, and handle the logic of requesting and displaying map tiles on the globe.
+A crucial feature for this project is the provider's ability to handle time-dynamic data. This is achieved by configuring it with a clock and a times object. The following commented code example demonstrates how to create a time-dynamic imagery layer for the MODIS "Corrected Reflectance (True Color)" product.
+import {
+ Viewer,
+ Ion,
+ WebMapTileServiceImageryProvider,
+ TimeIntervalCollection,
+ JulianDate,
+ Credit
+} from 'cesium';
+
+//... (Previous viewer setup code)...
+
+// 1. Define the time range for the data (Terra's operational period)
+const start = JulianDate.fromIso8601('2000-03-01');
+const stop = JulianDate.now(); // Or a fixed end date
+
+// Configure the viewer's clock
+viewer.clock.startTime = start.clone();
+viewer.clock.stopTime = stop.clone();
+viewer.clock.currentTime = start.clone();
+viewer.clock.clockRange = Cesium.ClockRange.CLAMPED;
+viewer.clock.multiplier = 86400; // Animate one day per second
+
+// Re-enable the timeline widget to control the clock
+viewer.timeline.zoomTo(start, stop);
+
+// 2. Create a TimeIntervalCollection to define the {Time} parameter
+const timeIntervals = new TimeIntervalCollection();
+timeIntervals.addInterval(Cesium.TimeInterval.fromIso8601({
+ iso8601: '2000-03-01/2025-12-31', // Full range of available data
+ isStartIncluded: true,
+ isStopIncluded: true,
+ data: {
+   Time: '{YYYY}-{MM}-{DD}' // This is a template string
+ }
+}));
+
+// 3. Create the WMTS Imagery Provider
+const modisTrueColorLayer = new WebMapTileServiceImageryProvider({
+ url: 'https://gibs.earthdata.nasa.gov/wmts/epsg4326/best/MODIS_Terra_CorrectedReflectance_TrueColor/default/{Time}/{TileMatrixSet}/{TileMatrix}/{TileRow}/{TileCol}.jpg',
+ layer: 'MODIS_Terra_CorrectedReflectance_TrueColor',
+ style: 'default',
+ tileMatrixSetID: '250m',
+ maximumLevel: 8,
+ format: 'image/jpeg',
+ // 4. Link the provider to the viewer's clock and the time intervals
+ clock: viewer.clock,
+ times: timeIntervals,
+ credit: new Credit('NASA GIBS')
+});
+
+// 5. Add the layer to the globe
+const imageryLayer = viewer.imageryLayers.add(modisTrueColorLayer);
+
+// Optionally, control layer properties
+imageryLayer.alpha = 0.8; // Set transparency
+imageryLayer.brightness = 1.2; // Adjust brightness
+
+This pattern, which closely follows the NASA GIBS example for AMSR2_Snow_Water_Equivalent found in the CesiumJS documentation, can be replicated for any time-varying layer available in the GIBS catalog. The key is to find the correct layer identifier and tileMatrixSetID from the catalog and construct the URL with the {Time} placeholder.
+Implementing the Historical Timeline
+CesiumJS provides a powerful, out-of-the-box solution for time management that is built directly into the Viewer widget. This includes two main components:
+1. The Clock: The viewer.clock object is the central timekeeper for the entire scene. It manages the current simulation time (currentTime), the start and end times of the simulation (startTime, stopTime), and the animation speed (multiplier). It can be played, paused, and set to specific times programmatically.
+2. The Timeline Widget: This is the UI component, typically displayed at the bottom of the screen, that provides a visual representation of the Clock's state. It allows the user to see the current time, scrub through the entire time range by dragging the shuttle, and zoom in or out to view different time scales. The Timeline widget is directly bound to the viewer.clock object; any interaction with the timeline UI automatically updates the currentTime of the clock.
+For this project, the implementation involves configuring the viewer.clock to match the temporal extent of the Terra mission's data, as shown in the code example above. By setting the startTime and stopTime, the Timeline widget will automatically adjust to display this range, providing an intuitive interface for exploring over two decades of data.
+Synchronizing Time: The Magic of Dynamic WMTS Requests
+The most powerful aspect of this architecture is the seamless, automatic synchronization between the user's interaction with the timeline and the data displayed on the globe. This connection is not magic but a well-designed feature of the CesiumJS ImageryProvider system.
+The synchronization works as follows:
+1. User Interaction: The user drags the timeline shuttle to a new date, for example, "2010-08-15". This action updates the viewer.clock.currentTime to the corresponding JulianDate.
+2. Clock Event: The Clock object fires a tick event, signaling that the current time has changed.
+3. Provider Update: The WebMapTileServiceImageryProvider (our modisTrueColorLayer) is listening for these tick events because it has been configured with a reference to the viewer.clock.
+4. URL Templating: Upon receiving the update, the provider consults its times property (the TimeIntervalCollection). It finds the interval that contains the new currentTime and retrieves the associated data object. It then uses this data to resolve the placeholders in its url template. In our example, it replaces {Time} with a string formatted as "2010-08-15".
+5. New Tile Requests: With the new, date-specific tile URLs constructed (e.g., .../default/2010-08-15/250m/...), the provider discards the old tiles and issues new network requests to the GIBS server to fetch the imagery for August 15, 2010.
+6. Scene Render: As the new tiles arrive, CesiumJS renders them on the globe, and the user sees the Earth as it was observed by Terra on that specific day.
+This entire process happens automatically on every frame when the clock is animating or every time the user scrubs the timeline. The key implementation detail is ensuring that the same clock instance is used for both the Viewer and the WebMapTileServiceImageryProvider. This shared reference is the link that enables the dynamic updates. The NASA GIBS web examples repository on GitHub contains a "Time Slider" example for Cesium that provides a live demonstration of this exact functionality and is an invaluable resource for development.
+Strategic Recommendations for a Winning Hackathon Project
+A successful hackathon project is more than just a technical demonstration; it is a well-executed solution to a problem, presented as a compelling and polished package. This final section provides strategic recommendations to elevate the project from a functional 3D globe to an award-worthy submission that effectively tells an Earth science story.
+Go Beyond the Data: Tell a Compelling Story
+The central requirement of the "Animation Celebration of Terra Data!" challenge is to "showcase an Earth science story". A project that simply allows a user to turn data layers on and off will be technically functional but will fail to meet the spirit of the challenge. The most impactful projects will curate the data to guide the user through a specific narrative with a clear beginning, middle, and end.
+Suggested Story Ideas:
+* The Anatomy of a Megafire: Focus on a major wildfire event, such as the 2023 Canadian wildfires.
+   * Data: Use MODIS Thermal Anomalies/Fire data to show the ignition and spread of the fires. Overlay MOPITT Carbon Monoxide data to visualize the massive pollution plume. Finally, add MISR or MODIS Aerosol Optical Depth data to show this plume being transported across the Atlantic Ocean, impacting air quality thousands of miles away.
+   * Narrative: Tell the story of the fire's lifecycle and its far-reaching atmospheric consequences.
+* The Vanishing Cryosphere: Create a multi-year animation focused on the Arctic or a major glacier system like those in the Himalayas.
+   * Data: Use MODIS Snow Cover data to show the seasonal minimum sea ice extent each September from 2000 to the present. Use MODIS Land Surface Temperature to show warming trends in the region. For a specific glacier, use high-resolution ASTER imagery from two different years to create a stark "before and after" comparison.
+   * Narrative: Tell the story of long-term climate change impacts on Earth's frozen regions.
+* The Growth of a Megacity: Use the high-resolution "zoom lens" of ASTER to document two decades of urban expansion.
+   * Data: Select a rapidly growing city like Las Vegas, USA, or Dubai, UAE. Find cloud-free ASTER scenes from the early 2000s and the 2020s. Allow the user to fade or swipe between the two images.
+   * Narrative: Tell the story of urbanization and its impact on the surrounding landscape.
+* Drought's Grip on a Breadbasket: Visualize the impact of a major drought on a critical agricultural region.
+   * Data: Use MODIS Vegetation Indices (NDVI) over a region like California's Central Valley or the Sahel in Africa. Animate the NDVI data over several years to show the decline in vegetation health during a drought period and the recovery after rains return.
+   * Narrative: Tell the story of climate-driven impacts on food security and ecosystems.
+Performance and Optimization
+While modern web browsers are incredibly powerful, rendering a full 3D globe with multiple high-resolution imagery layers can be computationally intensive. To ensure a smooth user experience, consider the following optimizations:
+* Limit Active Layers: Advise users against enabling too many global, opaque imagery layers simultaneously. The application's UI should encourage blending layers using the opacity slider (.alpha) rather than stacking them.
+* Enable Request Rendering: By default, CesiumJS re-renders the scene on every animation frame, which can consume significant CPU and GPU resources even when the view is static. For an application where the scene only changes in response to user input, enabling requestRenderMode is a crucial optimization. This tells CesiumJS to only render a new frame when the camera moves, the clock time changes, or data is updated, dramatically reducing resource consumption and improving battery life on mobile devices.
+A 48-Hour Hackathon Roadmap
+A structured plan is essential for success in a 48-hour hackathon. The following roadmap breaks the project into manageable phases:
+* Hours 1-4 (Setup & Scoping):
+   * Decision: Choose one compelling story to tell. This is the most important decision of the hackathon.
+   * Research: Identify the 2-3 key Terra data products from the GIBS Visualization Catalog that are needed to tell that story. Note their layer identifiers and available time ranges.
+   * Setup: Initialize the Git repository. Set up the basic CesiumJS application using the guide in Section 4.2. Ensure every team member has a functional development environment.
+* Hours 5-16 (Core Feature Development):
+   * Implementation: Implement the code to add the selected GIBS imagery layers to the globe using WebMapTileServiceImageryProvider.
+   * Timeline Configuration: Configure the viewer.clock and Timeline widget to match the time frame of the chosen story.
+   * Integration: Get the core time-scrubbing functionality working. Ensure that dragging the timeline successfully updates the imagery on the globe. This is the project's minimum viable product.
+* Hours 17-32 (UI/UX and Narrative):
+   * UI Development: Build the user interface for layer filtering (checkboxes, sliders for opacity).
+   * Storytelling: This is the phase to bring the narrative to life. Add annotations, pop-up info boxes, or a scrolling sidebar that explains what the user is seeing at key moments in the timeline. The Cesium Stories platform can serve as an inspiration for how to guide a user through a time-dynamic narrative. This phase transforms the project from a data viewer into a story.
+* Hours 33-48 (Polish, Debugging, and Submission):
+   * Demo Creation: Record a compelling video demonstration (e.g., a 30-second screen capture) of the application in action, walking through the story. Create the required slide presentation.
+   * Documentation: Write the detailed project description, clearly explaining the problem, the solution, the data used, and the story being told.
+   * Submission: Carefully review the official Project Submission Guide and ensure all required fields are completed and all links are publicly accessible.
+   * Final Polish: Test for bugs, refine the user experience, and ensure the application is stable and presentable for judging.
+Works cited
+1. Terra | NASA Earthdata, https://www.earthdata.nasa.gov/data/platforms/space-based-platforms/terra 2. Terra (EOS/AM-1) - eoPortal, https://www.eoportal.org/satellite-missions/terra 3. 2025 NASA Space Apps Challenge, https://www.spaceappschallenge.org/2025/challenges/ 4. ACCESS to Terra Data Fusion Products - NASA Earthdata, https://www.earthdata.nasa.gov/about/competitive-programs/access/terra-data-fusion-products 5. ASTER User Handbook - LP DAAC - USGS.gov, https://lpdaac.usgs.gov/documents/1010/ASTER_User_Handbook_v3.pdf 6. About - MODIS Web - NASA, https://modis.gsfc.nasa.gov/about/ 7. Terra Instruments, https://terra.nasa.gov/about/terra-instruments 8. Animation Celebration of Terra Data! - NASA Space Apps Challenge, https://www.spaceappschallenge.org/2025/challenges/animation-celebration-of-terra-data/?tab=resources 9. Resources - NASA Space Apps Challenge, https://www.spaceappschallenge.org/resources/ 10. Project Submission Guide - NASA Space Apps Challenge, https://www.spaceappschallenge.org/resources/project-submission-guide/ 11. Advanced Spaceborne Thermal Emission and Reflection ..., https://www.earthdata.nasa.gov/data/instruments/aster 12. Moderate Resolution Imaging Spectroradiometer | NASA Earthdata, https://www.earthdata.nasa.gov/data/instruments/modis 13. Global Imagery Browse Services APIs - NASA Earthdata, https://www.earthdata.nasa.gov/engage/open-data-services-software/earthdata-developer-portal/gibs-api 14. Worldview | NASA Earthdata, https://www.earthdata.nasa.gov/data/tools/worldview 15. Obtaining Aster Data, https://www.glyfac.buffalo.edu/courses/gly560/Lessons/OLD/misc/AsterData/obtain_aster_data.html 16. ASTER (Terra) | Geoimage, https://geoimage.com.au/satellites/aster-terra 17. Advanced Spaceborne Thermal Emission and Reflection Radiometer - Wikipedia, https://en.wikipedia.org/wiki/Advanced_Spaceborne_Thermal_Emission_and_Reflection_Radiometer 18. MODIS - NASA's Terra satellite, https://terra.nasa.gov/about/terra-instruments/modis 19. MODIS Data - NASA's Terra satellite, https://terra.nasa.gov/data/modis-data 20. Moderate Resolution Imaging Spectroradiometer - Wikipedia, https://en.wikipedia.org/wiki/Moderate_Resolution_Imaging_Spectroradiometer 21. MODIS - National Snow and Ice Data Center, https://nsidc.org/data/modis 22. MISR - Landscape Toolbox, https://landscapetoolbox.org/remote-sensor-types/misr/ 23. Multi-angle imaging spectroradiometer - Wikipedia, https://en.wikipedia.org/wiki/Multi-angle_imaging_spectroradiometer 24. MISR - NASA's Terra satellite, https://terra.nasa.gov/about/terra-instruments/misr 25. Introducing the 4.4 km spatial resolution Multi-Angle Imaging SpectroRadiometer (MISR) aerosol product - AMT, https://amt.copernicus.org/articles/13/593/2020/ 26. CERES Data | Terra, https://terra.nasa.gov/data/ceres-data 27. CERES - NASA's Terra satellite, https://terra.nasa.gov/about/terra-instruments/ceres 28. Clouds and the Earth's Radiant Energy System (CERES) - Northrop Grumman, https://www.northropgrumman.com/what-we-do/space/spacecraft/ceres 29. Clouds and the Earth's Radiant Energy System (CERES) | NESDIS, https://www.nesdis.noaa.gov/our-satellites/currently-flying/joint-polar-satellite-system/clouds-and-the-earths-radiant-energy-system-ceres 30. CERES EBAF: Clouds and Earth's Radiant Energy Systems (CERES) Energy Balanced and Filled (EBAF) | Climate Data Guide, https://climatedataguide.ucar.edu/climate-data/ceres-ebaf-clouds-and-earths-radiant-energy-systems-ceres-energy-balanced-and-filled 31. MOPITT | Atmospheric Chemistry Observations & Modeling, https://www2.acom.ucar.edu/facility/mopitt 32. MOPITT - Wikipedia, https://en.wikipedia.org/wiki/MOPITT 33. MOPITT First Light | Atmospheric Chemistry Observations & Modeling, https://www2.acom.ucar.edu/slide/mopitt-first-light 34. MOPITT - NASA's Terra satellite, https://terra.nasa.gov/about/terra-instruments/mopitt 35. MOPITT instrument data - NASA Earthdata, https://www.earthdata.nasa.gov/data/instruments/mopitt 36. About MOPITT | Canadian Space Agency, https://www.asc-csa.gc.ca/eng/satellites/mopitt.asp 37. Earthdata Developer Portal, https://www.earthdata.nasa.gov/engage/open-data-services-software/earthdata-developer-portal 38. API Documentation - CMR Search, https://cmr.earthdata.nasa.gov/search/site/docs/search/api 39. Search and Access - earthaccess, https://earthaccess.readthedocs.io/en/latest/user-reference/api/api/ 40. EarthData Cloud Cookbook - How do I access data using APIs? - NASA-Openscapes, https://nasa-openscapes.github.io/earthdata-cloud-cookbook/how-tos/use_apis.html 41. Home - Global Imagery Browse Services (GIBS) - GitHub Pages, https://nasa-gibs.github.io/gibs-api-docs/ 42. WebMapTileServiceImageryProv... - Cesium, https://cesium.com/learn/ion-sdk/ref-doc/WebMapTileServiceImageryProvider.html 43. WMTS Time Dimensions & RESTful Access - NASA Earthdata, https://www.earthdata.nasa.gov/news/blog/wmts-time-dimensions-restful-access 44. nasa-gibs/gibs-web-examples: Examples of using GIBS ... - GitHub, https://github.com/nasa-gibs/gibs-web-examples 45. How to Query and Use NASA Geo-Data for Your Next Data Science ..., https://medium.com/@sirmammingtonham/how-to-query-and-use-nasa-geo-data-for-your-next-data-science-project-27aef13c93d2 46. Programmatic Data Access Guide - National Snow and Ice Data Center, https://nsidc.org/data/user-resources/help-center/programmatic-data-access-guide 47. How do I access data using OPeNDAP? | National Snow and Ice Data Center, https://nsidc.org/data/user-resources/help-center/how-do-i-access-data-using-opendap 48. What Is OPeNDAP?, https://www.opendap.org/about/what-is-opendap/ 49. OPeNDAP in the Cloud | PO.DAAC / JPL / NASA, https://podaac.jpl.nasa.gov/OPeNDAP-in-the-Cloud 50. Quick Start, https://opendap.github.io/documentation/QuickStart.html 51. CesiumJS – Cesium, https://cesium.com/platform/cesiumjs/ 52. Work with a 3D Tiles renderer | Google Maps Tile API - Google for Developers, https://developers.google.com/maps/documentation/tile/use-renderer 53. Home | deck.gl, https://deck.gl/ 54. Comparative Analysis of Web-Based Point Cloud Visualization Tools: Cesium versus Deck.gl - MATOM.AI, https://matom.ai/insights/cesium-vs-deck-gl/ 55. Views and Projections | deck.gl, https://deck.gl/docs/developer-guide/views 56. Coordinate Systems - Deck.gl, https://deck.gl/docs/developer-guide/coordinate-systems 57. Visualizing Point Cloud & 3D Data On Web | by İbrahim Sarıçiçek - Medium, https://ibrahimsaricicek.medium.com/visualizing-point-cloud-3d-data-on-web-8f9792385e68 58. w3reality/three-geo: 3D geographic visualization library - GitHub, https://github.com/w3reality/three-geo 59. takram-design-engineering/three-geospatial: Geospatial Rendering in Three.js - GitHub, https://github.com/takram-design-engineering/three-geospatial 60. How to use Cesium JS: step-by-step tutorial - MapTiler documentation, https://docs.maptiler.com/cesium/examples/how-to-use-cesium/ 61. CesiumJS Quickstart – Cesium, https://cesium.com/learn/cesiumjs-learn/cesiumjs-quickstart/ 62. Tutorial: Display a scene | CesiumJS - Esri Developer - ArcGIS Online, https://developers.arcgis.com/cesiumjs/scenes/display-a-scene/ 63. WebMapTileServiceImageryProv, https://cesium.com/downloads/cesiumjs/releases/1.40/Build/Documentation/WebMapTileServiceImageryProvider.html 64. Standalone Cesium Timeline Widget - Stack Overflow, https://stackoverflow.com/questions/32338093/standalone-cesium-timeline-widget 65. [Cesium] Building custom timeline with time span selector - CesiumJS, https://community.cesium.com/t/cesium-building-custom-timeline-with-time-span-selector/6359 66. Daily satellite imagery from NASA GIBS - CesiumJS - Cesium Community, https://community.cesium.com/t/daily-satellite-imagery-from-nasa-gibs/2138 67. Visualizing Time Dynamic Data – Cesium, https://cesium.com/learn/ion/stories-time-dynamic/
