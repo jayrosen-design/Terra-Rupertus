@@ -1,3 +1,5 @@
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.17329211.svg)](https://doi.org/10.5281/zenodo.17329211)
+
 # 🌍 Terra Rupertus
 
 Follow Rupert the armadillo's journey through 25 years of NASA Terra satellite data, exploring global environmental changes through an interactive 3D globe and immersive storytelling experience.
